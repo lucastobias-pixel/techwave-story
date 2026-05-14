@@ -7,7 +7,6 @@ module.exports = (req, res, next) => {
         return res.status(403).json({ message: 'Token não fornecido!' });
     }
 
-    // O token geralmente vem como "Bearer <token>", vamos limpar isso:
     const tokenLimpo = token.split(' ')[1] || token;
 
     jwt.verify(tokenLimpo, 'SECRET_KEY_MUITO_SEGURA', (err, decoded) => {
@@ -16,6 +15,6 @@ module.exports = (req, res, next) => {
         }
         req.usuarioId = decoded.id;
         req.usuarioTipo = decoded.tipo;
-        next(); // Se estiver tudo certo, ele deixa ir para a rota
+        next();
     });
 };
