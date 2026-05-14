@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechWave Store - Catálogo</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; color: #333; }
+        h1 { text-align: center; color: #007bff; }
+        #lista-produtos { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .card:hover { transform: translateY(-5px); }
+        .card h3 { margin-top: 0; color: #222; }
+        .preco { font-size: 1.2em; font-weight: bold; color: #28a745; }
+        .categoria { display: inline-block; background: #e9ecef; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>🚀 TechWave Store - Catálogo Online</h1>
+    
+    <div id="lista-produtos">
+        <p style="text-align: center;">Buscando produtos no banco de dados...</p>
+    </div>
+
+    <script>
+        // Função que vai na sua API buscar os dados reais do MySQL
+        async function carregarProdutos() {
+            try {
+                const resposta = await fetch('http://localhost:3000/produtos');
+                const produtos = await resposta.json();
+
+                const container = document.getElementById('lista-produtos');
+                container.innerHTML = ''; // Limpa o texto de "Buscando..."
+
+                produtos.forEach(p => {
+                    container.innerHTML += `
+                        <div class="card">
+                            <h3>${p.nome}</h3>
+                            <p>${p.descricao}</p>
+                            <span class="preco">R$ ${p.preco}</span><br>
+                            <span class="categoria">${p.categoria_nome || 'Sem categoria'}</span>
+                        </div>
+                    `;
+                });
+            } catch (erro) {
+                console.error('Erro ao buscar produtos:', erro);
+                document.getElementById('lista-produtos').innerHTML = '<p>Erro ao carregar produtos. O servidor está rodando?</p>';
+            }
+        }
+
+        // Executa a função assim que a página abre
+        carregarProdutos();
+    </script>
+</body>
+</html>
