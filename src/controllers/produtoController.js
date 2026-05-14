@@ -2,7 +2,14 @@ const db = require('../database');
 
 // Listar todos os produtos
 exports.listarProdutos = (req, res) => {
-    db.query('SELECT * FROM produtos', (err, results) => {
+    // Essa query "funde" as duas tabelas baseada no ID da categoria
+    const query = `
+        SELECT produtos.*, categorias.nome AS categoria_nome 
+        FROM produtos 
+        INNER JOIN categorias ON produtos.categoria_id = categorias.id
+    `;
+
+    db.query(query, (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(results);
     });
@@ -10,12 +17,15 @@ exports.listarProdutos = (req, res) => {
 
 // Criar um novo produto
 exports.criarProduto = (req, res) => {
-    const { nome, descricao, preco, estoque } = req.body;
-    const query = 'INSERT INTO produtos (nome, descricao, preco, estoque) VALUES (?, ?, ?, ?)';
+    // Adicionamos categoria_id aqui:
+    const { nome, descricao, preco, estoque, categoria_id } = req.body;
     
-    db.query(query, [nome, descricao, preco, estoque], (err, result) => {
+    // Atualizamos a query SQL para incluir o novo campo:
+    const query = 'INSERT INTO produtos (nome, descricao, preco, estoque, categoria_id) VALUES (?, ?, ?, ?, ?)';
+    
+    db.query(query, [nome, descricao, preco, estoque, categoria_id], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
-        res.status(201).json({ message: 'Produto cadastrado!', id: result.insertId });
+        res.status(201).json({ message: 'Produto cadastrado com categoria!', id: result.insertId });
     });
 };
 
