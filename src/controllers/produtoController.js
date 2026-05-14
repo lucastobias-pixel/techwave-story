@@ -1,8 +1,6 @@
 const db = require('../database');
 
-// Listar todos os produtos
 exports.listarProdutos = (req, res) => {
-    // Essa query "funde" as duas tabelas baseada no ID da categoria
     const query = `
         SELECT produtos.*, categorias.nome AS categoria_nome 
         FROM produtos 
@@ -15,12 +13,9 @@ exports.listarProdutos = (req, res) => {
     });
 };
 
-// Criar um novo produto
 exports.criarProduto = (req, res) => {
-    // Adicionamos categoria_id aqui:
     const { nome, descricao, preco, estoque, categoria_id } = req.body;
     
-    // Atualizamos a query SQL para incluir o novo campo:
     const query = 'INSERT INTO produtos (nome, descricao, preco, estoque, categoria_id) VALUES (?, ?, ?, ?, ?)';
     
     db.query(query, [nome, descricao, preco, estoque, categoria_id], (err, result) => {
@@ -29,7 +24,6 @@ exports.criarProduto = (req, res) => {
     });
 };
 
-// Atualizar um produto existente
 exports.atualizarProduto = (req, res) => {
     const { id } = req.params;
     const { nome, descricao, preco, estoque } = req.body;
@@ -41,7 +35,6 @@ exports.atualizarProduto = (req, res) => {
     });
 };
 
-// Excluir um produto
 exports.excluirProduto = (req, res) => {
     const { id } = req.params;
     const query = 'DELETE FROM produtos WHERE id = ?';
