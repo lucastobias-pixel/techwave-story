@@ -12,3 +12,12 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
+
+const authRoutes = require('./routes/authRoutes');
+
+app.use(express.json()); // Essencial para o Postman funcionar!
+app.use('/auth', authRoutes); // Todas as rotas de auth começarão com /auth
+
+
+const produtoRoutes = require('./routes/produtoRoutes');
+app.use('/produtos', produtoRoutes);
