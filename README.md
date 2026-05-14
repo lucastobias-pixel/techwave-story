@@ -1,4 +1,4 @@
-# TechWave Store 🚀
+TechWave Store
 
 ## Sprint 1: Levantamento de Requisitos
 
